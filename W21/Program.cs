@@ -1,8 +1,5 @@
-﻿// ===============================================
-// Zadanie: Analiza danych osobowych z if...else
-// ===============================================
-string imie = "Ewa";
-string plec = "kobieta"; // Możliwe: "kobieta" lub "mężczyzna"
+﻿string imie = "Ewa";
+string plec = "kobieta"; 
 int wiek = 30;
 
 if (plec == "kobieta" && wiek < 30)
@@ -17,4 +14,4 @@ else if (plec == "mężczyzna" && wiek < 18)
 {
     Console.WriteLine("Niepełnoletni mężczyzna");
 }
-// (4): jeśli żaden warunek nie został spełniony — brak komunikatu
+
