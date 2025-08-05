@@ -1,4 +1,4 @@
-﻿#region Typy całkowite C#
+﻿#region Typy całkowite 
 // =================== Typy całkowite  C# ===================
 // Typ      | Zakres wartości                                      | Rozmiar | Znak
 // -------- | ----------------------------------------------------- | ------- | ----
@@ -16,7 +16,7 @@
 // optymalny typ zależnie od zakresu danych i kontekstu użycia.
 #endregion
 
-#region Typy zmiennoprzecinkowe C#
+#region Typy zmiennoprzecinkowe 
 // ================= Typy zmiennoprzecinkowe  C# =================
 // Typ     | Zakres wartości                         | Rozmiar | Precyzja   | Użycie
 // ------- | ---------------------------------------- | ------- | ---------- | -------------------------------
@@ -32,7 +32,7 @@
 // - Warto dodawać litery typu: 3.14f (float), 3.14m (decimal)
 #endregion
 
-#region Typy tekstowe C#
+#region Typy tekstowe 
 // ================== Typy tekstowe C# ===================
 // Typ      | Opis                                              | Przykład użycia
 // -------- | -------------------------------------------------- | -------------------------------
@@ -47,7 +47,7 @@
 // - C# posiada bogaty zestaw metod do pracy ze stringami: .Length, .ToUpper(), .Contains(), itd.
 #endregion
 
-#region Typ logiczny C#
+#region Typ logiczny 
 // ================== Typ logiczny  C# ===================
 // Typ    | Zakres wartości | Przykład użycia
 // ------ | ---------------- | --------------------------------
@@ -141,4 +141,115 @@
 // - Warunek musi zwracać wartość logiczną (bool): np. x > y, a == b, !aktywny
 // - Można używać operatorów logicznych: && (i), || (lub), ! (nie)
 // - Ułatwia sterowanie logiką programu w zależności od danych
+#endregion
+
+#region  Pętla for  – przykład z dniami tygodnia
+// ================= Pętla for – schemat działania =====================
+// Element         | Przykład                                        | Opis
+// --------------- | ------------------------------------------------ | --------------------------------------------
+// Tablica         | string[] dayOfWeeks = new string[7];            | tworzymy tablicę na 7 dni tygodnia
+// Inicjalizacja   | int i = 0                                        | początek pętli, zmienna sterująca
+// Warunek         | i < dayOfWeeks.Length                            | pętla trwa, dopóki indeks mieści się w tablicy
+// Zmiana          | i++                                              | po każdej iteracji zwiększamy indeks
+// Iteracja        | Console.WriteLine(dayOfWeeks[i]);               | wypisujemy bieżący dzień tygodnia
+// ====================================================================
+
+//string[] dayOfWeeks = new string[7];
+//dayOfWeeks[0] = "poniedziałek";
+//dayOfWeeks[1] = "wtorek";
+//dayOfWeeks[2] = "środa";
+//dayOfWeeks[3] = "czwartek";
+//dayOfWeeks[4] = "piątek";
+//dayOfWeeks[5] = "sobota";
+//dayOfWeeks[6] = "niedziela";
+
+//for (int i = 0; i < dayOfWeeks.Length; i++)
+//{
+//Console.WriteLine(dayOfWeeks[i]);
+//}
+#endregion
+
+#region  Pętla for  – przykład z List<string>
+// =================== Pętla for – schemat działania =====================
+// Element         | Przykład                                      | Opis
+// --------------- | ---------------------------------------------- | --------------------------------------------
+// Lista           | List<string> dayOfWeeks = new List<string>(); | tworzymy listę zamiast tablicy
+// Dodawanie       | dayOfWeeks.Add("poniedziałek");               | dodajemy kolejne dni tygodnia
+// Inicjalizacja   | int i = 0                                     | początek pętli, zmienna sterująca
+// Warunek         | i < dayOfWeeks.Count                          | pętla trwa, dopóki indeks mieści się w liście
+// Zmiana          | i++                                           | po każdej iteracji zwiększamy indeks
+// Iteracja        | Console.WriteLine(dayOfWeeks[i]);            | wypisujemy bieżący dzień tygodnia
+// =======================================================================
+
+//List<string> dayOfWeeks = new List<string>();
+//dayOfWeeks.Add("poniedziałek");
+//dayOfWeeks.Add("wtorek");
+//dayOfWeeks.Add("środa");
+//dayOfWeeks.Add("czwartek");
+//dayOfWeeks.Add("piątek");
+//dayOfWeeks.Add("sobota");
+//dayOfWeeks.Add("niedziela");
+
+//for (int i = 0; i < dayOfWeeks.Count; i++)
+//{
+//Console.WriteLine(dayOfWeeks[i]);
+//}
+#endregion
+
+#region  Pętla foreach  – przykład z List<string>
+// ================= Pętla foreach – schemat działania ==================
+// Element         | Przykład                                      | Opis
+// --------------- | ---------------------------------------------- | --------------------------------------------
+// Lista           | List<string> dayOfWeeks = new List<string>(); | lista z dniami tygodnia
+// Dodawanie       | dayOfWeeks.Add("poniedziałek");               | dodajemy kolejne dni do listy
+// Iteracja        | foreach (string day in dayOfWeeks)            | przechodzimy przez każdy element
+// Działanie       | Console.WriteLine(day);                       | wypisujemy dzień tygodnia
+//
+// 📝 UWAGA: Można też użyć `foreach (var day in dayOfWeeks)`.
+// Obie wersje są poprawne — kompilator wie, że typem elementów jest `string`.
+// - `string`: jawnie podajesz typ — jest to bardziej czytelne dla początkujących.
+// - `var`: skrócona składnia — przydatna gdy typ jest oczywisty.
+// Wybór zależy od stylu kodowania — z technicznego punktu widzenia obie działają identycznie.
+// =====================================================================
+
+//List<string> dayOfWeeks = new List<string>();
+//dayOfWeeks.Add("poniedziałek");
+//dayOfWeeks.Add("wtorek");
+//dayOfWeeks.Add("środa");
+//dayOfWeeks.Add("czwartek");
+//dayOfWeeks.Add("piątek");
+//dayOfWeeks.Add("sobota");
+//dayOfWeeks.Add("niedziela");
+
+//foreach (string day in dayOfWeeks)
+//{
+//Console.WriteLine(day);
+//}
+#endregion
+#region  Liczenie wystąpień cyfr – wersja z pętlą for
+// =================== Liczenie wystąpień cyfr ========================
+// Liczba           | int number = 4566;                           | liczba, którą analizujemy
+// Konwersja        | string text = number.ToString();             | zamieniamy na tekst (ciąg cyfr)
+// Słownik          | Dictionary<char, int> wystapienia            | przechowuje liczbę wystąpień każdej cyfry
+// Iteracja         | for (int i = 0; i < text.Length; i++)        | przechodzimy po każdej cyfrze tekstu
+// Działanie        | jeśli cyfra istnieje → zwiększ wartość       | w przeciwnym wypadku dodaj ją z wartością 1
+// Wyświetlenie     | foreach → wypisz wynik                       | pokazujemy ile razy wystąpiła każda cyfra
+// ====================================================================
+
+// text = number.ToString();
+//Dictionary<char, int> wystapienia = new Dictionary<char, int>();
+
+//for (int i = 0; i < text.Length; i++)
+//{
+//char cyfra = text[i];
+//if (wystapienia.ContainsKey(cyfra))
+//wystapienia[cyfra]++;
+//else
+//wystapienia[cyfra] = 1;
+//}
+
+//foreach (var wpis in wystapienia)
+//{
+//Console.WriteLine($"Cyfra {wpis.Key} występuje {wpis.Value} razy");
+//}
 #endregion
