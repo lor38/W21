@@ -1,19 +1,22 @@
-﻿//Zadanie : Policz wystąpienia cyfr w liczbie 4566
+﻿using W21;
 
-int number = 4566;
-string text = number.ToString();
-Dictionary<char, int> wystapienia = new Dictionary<char, int>();
-
-for (int i = 0; i < text.Length; i++)
+class Program
 {
-    char cyfra = text[i];
-    if (wystapienia.ContainsKey(cyfra))
-        wystapienia[cyfra]++;
-    else
-        wystapienia[cyfra] = 1;
-}
+    static void Main()
+    {
+        var emp1 = new Employee("Anna", "Kowalska", 30);
+        emp1.Scores.AddRange(new[] { 8, 9, 7, 10, 6 });
 
-foreach (var wpis in wystapienia)
-{
-    Console.WriteLine($"Cyfra {wpis.Key} występuje {wpis.Value} razy");
+        var emp2 = new Employee("Piotr", "Nowak", 42);
+        emp2.Scores.AddRange(new[] { 10, 7, 10, 9, 10 });
+
+        var emp3 = new Employee("Ewa", "Wiśniewska", 35);
+        emp3.Scores.AddRange(new[] { 10, 10, 9, 8, 9 });
+
+        var employees = new List<Employee> { emp1, emp2, emp3 };
+        var bestEmployee = employees.OrderByDescending(e => e.TotalScore).First();
+
+        Console.WriteLine(" Najlepszy pracownik:");
+        bestEmployee.Display();
+    }
 }
