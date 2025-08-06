@@ -1,22 +1,15 @@
 ﻿namespace W21
 {
-    public class Employee
+    public class Employee(string firstName, string lastName, int age)
     {
-        public string FirstName { get; }
-        public string LastName { get; }
-        public int Age { get; }
+        public string FirstName { get; } = firstName;
+        public string LastName { get; } = lastName;
+        public int Age { get; } = age;
 
-        private List<int> scores = new List<int>();
+        private List<int> scores = [];
         public IReadOnlyList<int> Scores => scores.AsReadOnly();
 
         public int TotalScore => scores.Sum();
-
-        public Employee(string firstName, string lastName, int age)
-        {
-            FirstName = firstName;
-            LastName = lastName;
-            Age = age;
-        }
 
         public void AddScore(int score)
         {
