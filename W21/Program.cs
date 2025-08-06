@@ -1,40 +1,46 @@
-﻿using W21;
-
+﻿
+using W21;
 
 class Program
 {
     static void Main()
     {
-        var emp1 = new Employee("Anna", "Kowalska", 30);
-        foreach (var score in new[] { 8, 9, 7, 10, 6 })
+
+
+        var emp1 = new Employee("Robert", "Lorenc");
+        emp1.AddGrade(4);
+        emp1.AddGrade(3);
+        emp1.AddGrade(5);
+
+        var emp2 = new Employee("Sandra", "Lorenc");
+        emp2.AddGrade(5);
+        emp2.AddGrade(5);
+        emp2.AddGrade(5);
+
+        var emp3 = new Employee("Ameli", "Lorenc");
+        emp3.AddGrade(2);
+        emp3.AddGrade(2);
+        emp3.AddGrade(5);
+
+        var emp4 = new Employee("Julian", "Lorenc");
+        emp4.AddGrade(6);
+        emp4.AddGrade(5);
+        emp4.AddGrade(0);
+
+        var employees = new[] { emp1, emp2, emp3, emp4 };
+
+
+        foreach (var emp in employees)
         {
-            emp1.AddScore(score);
+            var stats = emp.GetStatistics();
+
+            Console.WriteLine($"Pracownik: {emp.Name} {emp.Surname}");
+            Console.WriteLine($"Średnia ocen: {stats.Average:N2}");
+            Console.WriteLine($"Ocena minimalna: {stats.Min}");
+            Console.WriteLine($"Ocena maksymalna: {stats.Max}");
+            Console.WriteLine(new string('-', 30));
         }
 
-        var emp2 = new Employee("Piotr", "Nowak", 42);
-        foreach (var score in new[] { 10, 7, 10, 9, -10 })
-        {
-            emp2.AddScore(score);
-        }
 
-        var emp3 = new Employee("Ewa", "Wiśniewska", 35);
-        foreach (var score in new[] { 10, -50, 9, 8, 9 })
-        {
-            emp3.AddScore(score);
-        }
-
-        var employees = new List<Employee> { emp1, emp2, emp3 };
-        var bestEmployee = employees.OrderByDescending(e => e.TotalScore).First();
-        var worstEmployee = employees.OrderBy(e => e.TotalScore).First();
-
-        Console.WriteLine("Najlepszy pracownik:");
-        bestEmployee.Display();
-
-        Console.WriteLine();
-        Console.WriteLine();
-        Console.WriteLine();
-
-        Console.WriteLine(" Najgorszy pracownik:");
-        worstEmployee.Display();
     }
 }

@@ -1,28 +1,43 @@
-﻿namespace W21
+﻿
+
+namespace W21
 {
-    public class Employee(string firstName, string lastName, int age)
+    public class Employee
     {
-        public string FirstName { get; } = firstName;
-        public string LastName { get; } = lastName;
-        public int Age { get; } = age;
+        private List<float> grades = new List<float>();
 
-        private List<int> scores = [];
-        public IReadOnlyList<int> Scores => scores.AsReadOnly();
+        public string Name { get; private set; }
+        public string Surname { get; private set; }
 
-        public int TotalScore => scores.Sum();
-
-        public void AddScore(int score)
+        public Employee(string name, string surname)
         {
-            scores.Add(score);
+            this.Name = name;
+            this.Surname = surname;
         }
 
-        public void Display()
+        public void AddGrade(float grade)
         {
-            Console.WriteLine($"Imię: {FirstName}");
-            Console.WriteLine($"Nazwisko: {LastName}");
-            Console.WriteLine($"Wiek: {Age}");
-            Console.WriteLine($"Oceny: {string.Join(", ", scores)}");
-            Console.WriteLine($"Łączna liczba punktów: {TotalScore}");
+            this.grades.Add(grade);
+        }
+
+        public Statistics GetStatistics()
+        {
+            var statistics = new Statistics();
+
+            if (grades.Count > 0)
+            {
+                statistics.Average = grades.Average();
+                statistics.Max = grades.Max();
+                statistics.Min = grades.Min();
+            }
+            else
+            {
+                statistics.Average = 0;
+                statistics.Max = 0;
+                statistics.Min = 0;
+            }
+
+            return statistics;
         }
     }
 }

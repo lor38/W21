@@ -419,3 +419,55 @@
 // ====================================================================
 
 #endregion
+
+#region Programowanie — objaśnienie zagadnień dla klasy Votatnik
+
+// ====================================================================
+//  ref vs out — przekazywanie argumentów przez referencję
+// W C# oba służą do przekazywania danych do metody tak, aby można je było modyfikować.
+// - `ref`: zmienna musi być wcześniej zainicjalizowana. Metoda może ją zmieniać.
+// - `out`: zmienna może być niezainicjalizowana, ale musi dostać wartość w metodzie.
+// Są używane np. przy zwracaniu wielu wyników bez tworzenia klasy pomocniczej.
+//
+// Przykład:
+//     void Zmien(ref int a) { a = 10; }
+//     void Wypelnij(out int b) { b = 20; }
+//
+// ====================================================================
+//  Model danych — struktura informacji w systemie
+// Model danych to klasa lub struktura, która opisuje dane, np. użytkownika, głos, punkt.
+// Przykład modelu:
+//     class Votatnik
+//     {
+//         public string Imie;
+//         public int Punkty;
+//     }
+// Model danych służy do przechowywania informacji i przekazywania ich między warstwami systemu.
+//
+// ====================================================================
+//  Interpolacja stringów — wygodne składanie tekstu
+// Zamiast używać konkatenacji (`+`), interpolacja pozwala wstawić wartości do tekstu:
+//     string name = "Robert";
+//     string info = $"Witaj, {name}"; // wynik: Witaj, Robert
+// Ułatwia tworzenie komunikatów, zapytań SQL, logów i opisu obiektów.
+//
+// ====================================================================
+//  Max / Min „na piechotę” — bez użycia LINQ
+// Czasem trzeba obliczyć wartość maksymalną lub minimalną ręcznie.
+// Przykład:
+//     float max = float.MinValue;
+//     foreach (var x in liczby)
+//         max = Math.Max(max, x);
+// Jest to przydatne, gdy nie można użyć `Max()` lub trzeba sprawdzić warunki specjalne.
+//
+// ====================================================================
+//  Przekazywanie parametrów — jak działa mechanizm w metodach
+// W C# domyślnie przekazywane są:
+// - Typy wartościowe: przez kopię (int, float) — metoda widzi kopię wartości.
+// - Typy referencyjne: przez referencję (klasa, lista) — metoda może zmieniać oryginał.
+// Można też używać `ref`, `out`, lub `in` by kontrolować sposób przekazywania.
+// To kluczowe dla optymalizacji i bezpieczeństwa danych.
+//
+// ====================================================================
+
+#endregion
