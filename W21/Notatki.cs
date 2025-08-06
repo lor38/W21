@@ -226,6 +226,7 @@
 //Console.WriteLine(day);
 //}
 #endregion
+
 #region  Liczenie wystąpień cyfr – wersja z pętlą for
 // =================== Liczenie wystąpień cyfr ========================
 // Liczba           | int number = 4566;                           | liczba, którą analizujemy
@@ -252,4 +253,169 @@
 //{
 //Console.WriteLine($"Cyfra {wpis.Key} występuje {wpis.Value} razy");
 //}
+#endregion
+
+#region  Programowanie obiektowe — wyjaśnienie na przykładzie klasy użytkownika
+
+// ====================================================================
+//  Klasa — fundament obiektowości
+// Klasa to wzorzec, który opisuje, jak ma wyglądać obiekt.
+// Można ją porównać do projektu domu — zawiera informacje o tym,
+// co obiekt „ma” (dane) i co „robi” (funkcje).
+// Na podstawie klasy można tworzyć wiele obiektów,
+// każdy z własnymi wartościami.
+//
+// ====================================================================
+//  Konstruktor — sposób tworzenia obiektu
+// Konstruktor to specjalna część klasy, która uruchamia się automatycznie
+// przy tworzeniu obiektu. Dzięki niemu można od razu ustawić dane początkowe,
+// np. nazwę użytkownika czy hasło.
+// To jak wypełnienie formularza przy zakładaniu konta.
+//
+// ====================================================================
+//  Modyfikatory dostępu — kontrola widoczności
+// W programowaniu obiektowym ważne jest, by nie wszystko było dostępne dla każdego.
+// Dlatego stosuje się modyfikatory:
+//
+// - Prywatne elementy są ukryte i dostępne tylko wewnątrz klasy.
+// - Publiczne elementy są widoczne i dostępne z zewnątrz.
+//
+// To pozwala chronić dane i ograniczyć ryzyko przypadkowych zmian.
+//
+// ====================================================================
+//  Pola i właściwości — przechowywanie danych
+// Pole to miejsce, gdzie przechowywane są dane obiektu,
+// np. lista punktów użytkownika.
+// Właściwości to bardziej elegancki sposób udostępniania tych danych —
+// pozwalają na kontrolę, czy i jak można je odczytać lub zmieniać.
+//
+// ====================================================================
+//  Hermetyzacja — bezpieczeństwo danych
+// Hermetyzacja polega na ukrywaniu danych wewnątrz klasy
+// i udostępnianiu ich tylko przez specjalne metody.
+// Dzięki temu dane są bezpieczne, a dostęp do nich jest kontrolowany.
+// Przykładowo: zamiast pozwalać każdemu zmieniać listę punktów,
+// klasa udostępnia metodę, która dodaje punkt w określony sposób.
+//
+// ====================================================================
+//  Static — elementy wspólne dla wszystkich
+// Elementy statyczne nie należą do konkretnego obiektu, lecz do całej klasy.
+// Można z nich korzystać bez tworzenia obiektu.
+// Są przydatne, gdy coś jest wspólne dla wszystkich,
+// np. funkcje matematyczne czy licznik użytkowników.
+//
+// ====================================================================
+//  Poprawność i czytelność
+// Dobrze zaprojektowana klasa powinna być:
+//
+// - Spójna — wszystkie elementy powinny ze sobą współgrać.
+// - Czytelna — łatwa do zrozumienia przez innych programistów.
+// - Bezpieczna — dane powinny być chronione przed przypadkowymi zmianami.
+//
+// ====================================================================
+
+#endregion
+
+#region Testowanie oprogramowania — wyjaśnienie na przykładzie testów jednostkowych
+
+// ====================================================================
+//  Testy — strażnicy jakości kodu
+// Testy to fragmenty kodu, które sprawdzają, czy inne fragmenty działają poprawnie.
+// Dzięki nim można szybko wykryć błędy i upewnić się, że zmiany nie psują istniejącej logiki.
+// To jak kontrola jakości w fabryce — zanim produkt trafi do klienta, musi przejść test.
+//
+// ====================================================================
+//  Testy jednostkowe — mikroskop dla kodu
+// Test jednostkowy sprawdza jedną, konkretną funkcję lub metodę.
+// Jest szybki, precyzyjny i łatwy do uruchomienia.
+// Przykład: sprawdzenie, czy metoda `DodajPunkt()` faktycznie zwiększa liczbę punktów.
+//
+// ====================================================================
+//  Framework testowy — zestaw narzędzi
+// Do pisania testów używa się specjalnych bibliotek, np.:
+// - NUnit (dla C#)
+// - xUnit
+// - MSTest
+// Framework udostępnia metody takie jak `Assert.AreEqual`, które porównują oczekiwany wynik z rzeczywistym.
+//
+// ====================================================================
+//  Asercje — oczekiwania vs rzeczywistość
+// Asercja to instrukcja, która mówi: „Spodziewam się, że wynik będzie taki”.
+// Jeśli wynik jest inny — test się nie powiedzie.
+// Przykład:
+//     Assert.AreEqual(5, Dodaj(2, 3)); // oczekujemy, że 2 + 3 = 5
+//
+// ====================================================================
+//  Izolacja — test bez zakłóceń
+// Dobry test powinien działać niezależnie od innych.
+// Nie powinien polegać na danych z zewnątrz ani wpływać na inne testy.
+// To jak testowanie jednej części maszyny bez uruchamiania całej fabryki.
+//
+// ====================================================================
+//  Automatyzacja — testy na autopilocie
+// Testy można uruchamiać automatycznie przy każdej zmianie kodu.
+// Dzięki temu programista od razu widzi, czy coś się zepsuło.
+// Narzędzia takie jak GitHub Actions, Jenkins czy Azure DevOps wspierają ten proces.
+//
+// ====================================================================
+//  Dobry test — cechy
+// Test powinien być:
+// - Jasny — łatwy do zrozumienia.
+// - Powtarzalny — zawsze daje ten sam wynik.
+// - Szybki — nie powinien spowalniać pracy.
+// - Trafny — sprawdza konkretną rzecz, a nie wszystko naraz.
+//
+// ====================================================================
+
+#endregion
+
+#region Typy wartościowe i referencyjne — wyjaśnienie na przykładzie 
+
+// ====================================================================
+//  Czym są typy wartościowe?
+// Typ wartościowy przechowuje dane bezpośrednio w zmiennej.
+// Kopiowanie takiej zmiennej oznacza, że tworzymy niezależną kopię danych.
+// Przykłady: int, bool, double, enum, struct
+//
+// Działa jak kopia dokumentu — zmiana kopii nie wpływa na oryginał.
+//
+// ====================================================================
+//  Czym są typy referencyjne?
+// Typ referencyjny przechowuje adres do danych w pamięci (referencję).
+// Kopiując taką zmienną, kopiujemy adres, więc różne zmienne wskazują na ten sam obiekt.
+// Przykłady: string, array, class, List<>, Dictionary<>
+//
+// Działa jak współdzielony dokument online — zmiany widzi każdy, kto ma dostęp.
+//
+// ====================================================================
+//  Główne różnice
+//
+// - Typy wartościowe znajdują się w pamięci typu stos (stack).
+// - Typy referencyjne znajdują się w stercie (heap), a ich adresy — na stosie.
+//
+// - Wartość → niezależna kopia.
+// - Referencja → wspólna zawartość.
+//
+// ====================================================================
+//  Przykład: typ wartościowy
+//     int a = 5;
+//     int b = a;
+//     b = 10;
+//     // a nadal = 5, bo b to niezależna kopia
+//
+// ====================================================================
+//  Przykład: typ referencyjny
+//     var list1 = new List<int> { 1, 2, 3 };
+//     var list2 = list1;
+//     list2.Add(4);
+//     // list1 także zawiera 4, bo obie zmienne wskazują na ten sam obiekt
+//
+// ====================================================================
+//  Specjalny przypadek: string
+// Typ string to **typ referencyjny**, ale zachowuje się jak typ wartościowy,
+// ponieważ jest niemutowalny (nie można go zmienić).
+// Każda modyfikacja tworzy nowy obiekt w pamięci.
+//
+// ====================================================================
+
 #endregion
