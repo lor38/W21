@@ -10,10 +10,11 @@ class Program
         var emp3 = new Employee("Ameli", "Lorenc");
         var emp4 = new Employee("Julian", "Lorenc");
 
-        emp1.AddGrade(85.5f);
-        emp1.AddGrade(92.3);
-        emp1.AddGrade(75L);
+        
+        string[] robertGrades = { "85.5", "abc", "92.3", "-5", "75" };
+        ValidateGrades(emp1, robertGrades);
 
+       
         emp2.AddGrade(5.0);
         emp2.AddGrade(5L);
         emp2.AddGrade(0f);
@@ -26,6 +27,7 @@ class Program
         emp4.AddGrade(5L);
         emp4.AddGrade(0f);
 
+        // 🔁 Foreach loop
         Console.ForegroundColor = ConsoleColor.Cyan;
         Console.WriteLine("----Employee Statistics (Foreach Loop)----:");
         Console.ResetColor();
@@ -35,6 +37,7 @@ class Program
             PrintStats(emp, stats, ConsoleColor.Green);
         }
 
+        // 🔁 For loop
         Console.ForegroundColor = ConsoleColor.Cyan;
         Console.WriteLine("----Employee Statistics (For Loop)----:");
         Console.ResetColor();
@@ -44,6 +47,7 @@ class Program
             PrintStats(emp2, stats, ConsoleColor.Yellow);
         }
 
+        // 🔁 Do-While loop
         Console.ForegroundColor = ConsoleColor.Cyan;
         Console.WriteLine("----Employee Statistics (Do-While Loop)----:");
         Console.ResetColor();
@@ -55,6 +59,7 @@ class Program
             j++;
         } while (j < 1);
 
+        // 🔁 While loop
         Console.ForegroundColor = ConsoleColor.Cyan;
         Console.WriteLine("----Employee Statistics (While Loop)----:");
         Console.ResetColor();
@@ -69,6 +74,21 @@ class Program
         Console.ResetColor(); 
     }
 
+    
+    static void ValidateGrades(Employee employee, string[] grades)
+    {
+        foreach (var grade in grades)
+        {
+            if (!employee.TryAddGrade(grade, out string? error))
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine($"[Error] Failed to add grade '{grade}' for {employee.Name} {employee.Surname}: {error}");
+                Console.ResetColor();
+            }
+        }
+    }
+
+    // 🎨 Wyświetlanie statystyk z kolorami
     static void PrintStats(Employee emp, Statistics stats, ConsoleColor color)
     {
         Console.ForegroundColor = color;
