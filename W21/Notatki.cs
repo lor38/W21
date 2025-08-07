@@ -420,8 +420,7 @@
 
 #endregion
 
-#region Programowanie — objaśnienie zagadnień dla klasy Votatnik
-
+#region przekazywanie argumentów — wyjaśnienie na przykładzie ref i out
 // ====================================================================
 //  ref vs out — przekazywanie argumentów przez referencję
 // W C# oba służą do przekazywania danych do metody tak, aby można je było modyfikować.
@@ -467,6 +466,55 @@
 // - Typy referencyjne: przez referencję (klasa, lista) — metoda może zmieniać oryginał.
 // Można też używać `ref`, `out`, lub `in` by kontrolować sposób przekazywania.
 // To kluczowe dla optymalizacji i bezpieczeństwa danych.
+//
+// ====================================================================
+
+#endregion
+
+#region Walidacja Rzutowanie  Parsowanie Sprawdzanie typu Zaokrąglanie
+// ====================================================================
+//  Walidacja danych — sprawdzanie poprawności wejścia
+// Walidacja to proces sprawdzania, czy dane są zgodne z oczekiwanym formatem.
+// Chroni przed błędami i nieprawidłowymi wartościami.
+// Przykład:
+//     if (ocena < 0 || ocena > 100)
+//         throw new ArgumentOutOfRangeException("Ocena musi być od 0 do 100");
+// Można też zwracać komunikaty błędów zamiast rzucać wyjątki.
+//
+// ====================================================================
+//  Rzutowanie — wymuszenie zmiany typu
+// Rzutowanie pozwala zmienić typ zmiennej, np. z float na int.
+// Przykład:
+//     float f = 3.7f;
+//     int i = (int)f; // wynik: 3 (obcięcie części dziesiętnej)
+// Uwaga: rzutowanie nie zaokrągla — tylko obcina.
+//
+// ====================================================================
+//  Parsowanie i konwertowanie — zmiana stringa na liczbę
+// Parsowanie to próba konwersji tekstu na typ liczbowy.
+// Przykład:
+//     string s = "42";
+//     int i = int.Parse(s); // może rzucić wyjątek
+// Bezpieczniejsza wersja:
+//     if (int.TryParse(s, out int i))
+//         Console.WriteLine($"Liczba: {i}");
+// TryParse nie rzuca wyjątku — zwraca true/false.
+//
+// ====================================================================
+//  Sprawdzanie typu — czy string da się przekonwertować
+// Można sprawdzić, czy tekst jest poprawną liczbą:
+//     bool isInt = int.TryParse("123", out _);
+//     bool isFloat = float.TryParse("3.14", out _);
+// Znak `_` oznacza, że nie interesuje nas wynik — tylko czy się udało.
+//
+// ====================================================================
+//  Zaokrąglanie — jak zmienić float na int z zaokrągleniem
+// Aby zaokrąglić wartość do najbliższej liczby całkowitej:
+//     float f = 3.6f;
+//     int i = (int)Math.Round(f); // wynik: 4
+// Domyślnie używane jest „bankers rounding” (np. 2.5 → 2, 3.5 → 4).
+// Aby zawsze zaokrąglać .5 w górę:
+//     int i = (int)Math.Round(f, MidpointRounding.AwayFromZero);
 //
 // ====================================================================
 
