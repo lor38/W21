@@ -105,5 +105,106 @@ namespace W21
 
             return statistics;
         }
+
+        public Statistics GetStatisticsWithForEach()
+        {
+            var statistics = new Statistics();
+
+            if (grades.Count == 0)
+                return statistics;
+
+            float sum = 0;
+            float min = float.MaxValue;
+            float max = float.MinValue;
+
+            foreach (var grade in grades)
+            {
+                sum += grade;
+                min = Math.Min(min, grade);
+                max = Math.Max(max, grade);
+            }
+
+            statistics.Average = sum / grades.Count;
+            statistics.Min = min;
+            statistics.Max = max;
+
+            return statistics;
+        }
+
+        public Statistics GetStatisticsWithFor()
+        {
+            var statistics = new Statistics();
+
+            if (grades.Count == 0)
+                return statistics;
+
+            float sum = 0;
+            float min = float.MaxValue;
+            float max = float.MinValue;
+
+            for (int i = 0; i < grades.Count; i++)
+            {
+                float grade = grades[i];
+                sum += grade;
+                min = Math.Min(min, grade);
+                max = Math.Max(max, grade);
+            }
+
+            statistics.Average = sum / grades.Count;
+            statistics.Min = min;
+            statistics.Max = max;
+
+            return statistics;
+        }
+
+        public Statistics GetStatisticsWithWhile()
+        {
+            var statistics = new Statistics();
+
+            if (grades.Count == 0)
+                return statistics;
+
+            float sum = 0;
+            float min = float.MaxValue;
+            float max = float.MinValue;
+            int i = 0;
+
+            while (i < grades.Count)
+            {
+                float grade = grades[i];
+                sum += grade;
+                min = Math.Min(min, grade);
+                max = Math.Max(max, grade);
+                i++;
+            }
+
+            statistics.Average = sum / grades.Count;
+            statistics.Min = min;
+            statistics.Max = max;
+
+            return statistics;
+        }
+        public Statistics GetStatisticsWithDoWhile()
+        {
+            var statistics = new Statistics();
+            if (grades.Count == 0)
+                return statistics;
+            float sum = 0;
+            float min = float.MaxValue;
+            float max = float.MinValue;
+            int i = 0;
+            do
+            {
+                float grade = grades[i];
+                sum += grade;
+                min = Math.Min(min, grade);
+                max = Math.Max(max, grade);
+                i++;
+            } while (i < grades.Count);
+            statistics.Average = sum / grades.Count;
+            statistics.Min = min;
+            statistics.Max = max;
+            return statistics;
+        }
     }
 }
