@@ -27,7 +27,7 @@ class Program
         emp4.AddGrade(5L);
         emp4.AddGrade(0f);
 
-        // 🔁 Foreach loop
+       
         Console.ForegroundColor = ConsoleColor.Cyan;
         Console.WriteLine("----Employee Statistics (Foreach Loop)----:");
         Console.ResetColor();
@@ -37,7 +37,7 @@ class Program
             PrintStats(emp, stats, ConsoleColor.Green);
         }
 
-        // 🔁 For loop
+       
         Console.ForegroundColor = ConsoleColor.Cyan;
         Console.WriteLine("----Employee Statistics (For Loop)----:");
         Console.ResetColor();
@@ -47,7 +47,7 @@ class Program
             PrintStats(emp2, stats, ConsoleColor.Yellow);
         }
 
-        // 🔁 Do-While loop
+        
         Console.ForegroundColor = ConsoleColor.Cyan;
         Console.WriteLine("----Employee Statistics (Do-While Loop)----:");
         Console.ResetColor();
@@ -59,7 +59,7 @@ class Program
             j++;
         } while (j < 1);
 
-        // 🔁 While loop
+       
         Console.ForegroundColor = ConsoleColor.Cyan;
         Console.WriteLine("----Employee Statistics (While Loop)----:");
         Console.ResetColor();
@@ -88,7 +88,7 @@ class Program
         }
     }
 
-    // 🎨 Wyświetlanie statystyk z kolorami
+    
     static void PrintStats(Employee emp, Statistics stats, ConsoleColor color)
     {
         Console.ForegroundColor = color;
