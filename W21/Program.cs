@@ -81,7 +81,7 @@ class Program
             if (!employee.TryAddGrade(grade, out string? error))
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine($"[Błąd] Nie można dodać oceny '{grade}' dla {employee.Name} {employee.Surname}: {error}");
+                Console.WriteLine($"[Error] Failed to add grade '{grade}' for {employee.Name} {employee.Surname}: {error}");
                 Console.ResetColor();
             }
         }
