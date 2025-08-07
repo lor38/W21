@@ -5,97 +5,112 @@ class Program
 {
     static void Main()
     {
-        var emp1 = new Employee("Robert", "Lorenc");
-        var emp2 = new Employee("Sandra", "Lorenc");
-        var emp3 = new Employee("Ameli", "Lorenc");
-        var emp4 = new Employee("Julian", "Lorenc");
-
-        string[] robertGrades = { "85.5", "abc", "92.3", "-5", "75" };
-        ValidateGrades(emp1, robertGrades);
-
-        
-        emp2.AddGrade(5.0);
-        emp2.AddGrade(5L);
-        emp2.AddGrade(0f);
-
-        emp3.AddGrade(2.0);
-        emp3.AddGrade(2L);
-        emp3.AddGrade(5f);
-
-        emp4.AddGrade(6.0);
-        emp4.AddGrade(5L);
-        emp4.AddGrade(0f);
-
-   
         Console.ForegroundColor = ConsoleColor.Cyan;
-        Console.WriteLine("----Employee Statistics (Foreach Loop)----:");
+        Console.WriteLine(new string('═', 60));
+        Console.WriteLine("  WITAMY W APLIKACJI OCEN PRACOWNIKA");
+        Console.WriteLine("  Autor: Robert Lorenc");
+        Console.WriteLine("  Projekt: Wyzwanie w 21 Dni — edu.gotoit.pl");
+        Console.WriteLine(new string('═', 60));
         Console.ResetColor();
-        foreach (var emp in new[] { emp1 })
-        {
-            var stats = emp.GetStatisticsWithForEach();
-            PrintStats(emp, stats, ConsoleColor.Green);
-        }
 
-     
-        Console.ForegroundColor = ConsoleColor.Cyan;
-        Console.WriteLine("----Employee Statistics (For Loop)----:");
+        Console.WriteLine(new string('═', 60));
+        Console.ForegroundColor = ConsoleColor.Magenta;
+        Console.Write("\n Podaj imię pracownika: ");
         Console.ResetColor();
-        for (int i = 0; i < 1; i++)
-        {
-            var stats = emp2.GetStatisticsWithFor();
-            PrintStats(emp2, stats, ConsoleColor.Yellow);
-        }
+        string? nameInput = Console.ReadLine();
+        string name = string.IsNullOrWhiteSpace(nameInput) ? "Nieznane" : nameInput.Trim();
 
-       
-        Console.ForegroundColor = ConsoleColor.Cyan;
-        Console.WriteLine("----Employee Statistics (Do-While Loop)----:");
+        Console.ForegroundColor = ConsoleColor.Magenta;
+        Console.Write(" Podaj nazwisko pracownika: ");
         Console.ResetColor();
-        int j = 0;
-        do
-        {
-            var stats = emp3.GetStatisticsWithDoWhile();
-            PrintStats(emp3, stats, ConsoleColor.Magenta);
-            j++;
-        } while (j < 1);
+        string? surnameInput = Console.ReadLine();
+        string surname = string.IsNullOrWhiteSpace(surnameInput) ? "Nieznane" : surnameInput.Trim();
 
-        
-        Console.ForegroundColor = ConsoleColor.Cyan;
-        Console.WriteLine("----Employee Statistics (While Loop)----:");
+        var employee = new Employee(name, surname);
+
+        Console.ForegroundColor = ConsoleColor.Yellow;
+        Console.WriteLine("\n Wpisz oceny pracownika (wpisz 'q' aby zakończyć i podliczyć):\n");
         Console.ResetColor();
-        int k = 0;
-        while (k < 1)
-        {
-            var stats = emp4.GetStatisticsWithWhile();
-            PrintStats(emp4, stats, ConsoleColor.Blue);
-            k++;
-        }
 
-        Console.ResetColor(); 
-    }
-
-    
-    static void ValidateGrades(Employee employee, string[] grades)
-    {
-        foreach (var grade in grades)
+        while (true)
         {
-            if (!employee.TryAddGrade(grade, out string? error))
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.Write(" Ocena: ");
+            Console.ResetColor();
+            string? input = Console.ReadLine();
+
+            if (string.IsNullOrWhiteSpace(input))
+            {
+                Console.ForegroundColor = ConsoleColor.DarkYellow;
+                Console.WriteLine("Uwaga: Nie wpisano żadnej wartości. Spróbuj ponownie.");
+                Console.ResetColor();
+                continue;
+            }
+
+            input = input.Trim();
+
+            if (input.ToLower() == "q")
+                break;
+
+            if (!employee.TryAddGrade(input, out string? error))
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine($"[Error] Failed to add grade '{grade}' for {employee.Name} {employee.Surname}: {error}");
+                Console.WriteLine($"Błąd: Nie udało się dodać oceny '{input}'. Powód: {error}");
                 Console.ResetColor();
             }
         }
+
+        Console.ForegroundColor = ConsoleColor.Cyan;
+        Console.WriteLine(new string('═', 60));
+        Console.WriteLine("\n STATYSTYKI PRACOWNIKA\n");
+        Console.ResetColor();
+
+        var stats = employee.GetStatisticsWithForEach();
+        WypiszStatystyki(employee, stats, ConsoleColor.Green);
+
+        Console.ResetColor();
     }
 
-    
-    static void PrintStats(Employee emp, Statistics stats, ConsoleColor color)
+    static void WypiszStatystyki(Employee emp, Statistics stats, ConsoleColor color)
     {
         Console.ForegroundColor = color;
-        Console.WriteLine($"Employee: {emp.Name} {emp.Surname}");
-        Console.WriteLine($"Average grade:     {stats.Average:N2}");
-        Console.WriteLine($"Minimum grade:     {stats.Min}");
-        Console.WriteLine($"Maximum grade:     {stats.Max}");
-        Console.WriteLine(new string('-', 35));
+        Console.WriteLine($" Pracownik:         {emp.Name} {emp.Surname}");
+        Console.WriteLine($" Średnia ocen:      {stats.Average:N2}");
+        Console.WriteLine($" Najniższa ocena:   {stats.Min}");
+        Console.WriteLine($" Najwyższa ocena:   {stats.Max}");
+        Console.WriteLine($" Ocena literowa:    {stats.AverageLetter}");
         Console.ResetColor();
+
+        string description;
+        ConsoleColor descColor;
+
+        switch (stats.AverageLetter)
+        {
+            case 'A':
+                description = "Wybitny";
+                descColor = ConsoleColor.DarkGreen;
+                break;
+            case 'B':
+                description = "Bardzo dobry";
+                descColor = ConsoleColor.Green;
+                break;
+            case 'C':
+                description = "Dobry";
+                descColor = ConsoleColor.Yellow;
+                break;
+            case 'D':
+                description = "Dostateczny";
+                descColor = ConsoleColor.DarkYellow;
+                break;
+            default:
+                description = "Niedostateczny";
+                descColor = ConsoleColor.Red;
+                break;
+        }
+
+        Console.ForegroundColor = descColor;
+        Console.WriteLine($" Ocena opisowa:     {description}");
+        Console.ResetColor();
+        Console.WriteLine(new string('═', 60));
     }
 }

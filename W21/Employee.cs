@@ -1,4 +1,5 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 
 namespace W21
 {
@@ -19,11 +20,11 @@ namespace W21
         {
             if (grade < 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(grade), "Grade cannot be less than 0.");
+                throw new ArgumentOutOfRangeException(nameof(grade), "Ocena nie może być mniejsza niż 0.");
             }
             else if (grade > 100)
             {
-                throw new ArgumentOutOfRangeException(nameof(grade), "Grade cannot be greater than 100.");
+                throw new ArgumentOutOfRangeException(nameof(grade), "Ocena nie może być większa niż 100.");
             }
 
             grades.Add(grade);
@@ -33,12 +34,12 @@ namespace W21
         {
             if (string.IsNullOrWhiteSpace(grade))
             {
-                throw new ArgumentException("Grade cannot be empty.", nameof(grade));
+                throw new ArgumentException("Ocena nie może być pusta.", nameof(grade));
             }
 
             if (!float.TryParse(grade, NumberStyles.Float, CultureInfo.InvariantCulture, out float numericGrade))
             {
-                throw new ArgumentException("The provided value is not a valid number.", nameof(grade));
+                throw new ArgumentException("Podana wartość nie jest prawidłową liczbą.", nameof(grade));
             }
 
             AddGrade(numericGrade);
@@ -47,7 +48,7 @@ namespace W21
         public void AddGrade(double grade)
         {
             if (grade < 0 || grade > 100)
-                throw new ArgumentOutOfRangeException(nameof(grade), "Grade must be between 0 and 100.");
+                throw new ArgumentOutOfRangeException(nameof(grade), "Ocena musi być w zakresie od 0 do 100.");
 
             grades.Add((float)grade);
         }
@@ -55,7 +56,7 @@ namespace W21
         public void AddGrade(long grade)
         {
             if (grade < 0 || grade > 100)
-                throw new ArgumentOutOfRangeException(nameof(grade), "Grade must be between 0 and 100.");
+                throw new ArgumentOutOfRangeException(nameof(grade), "Ocena musi być w zakresie od 0 do 100.");
 
             grades.Add((float)grade);
         }
@@ -66,19 +67,19 @@ namespace W21
 
             if (string.IsNullOrWhiteSpace(grade))
             {
-                error = "Grade cannot be empty.";
+                error = "Ocena nie może być pusta.";
                 return false;
             }
 
             if (!float.TryParse(grade, NumberStyles.Float, CultureInfo.InvariantCulture, out float numericGrade))
             {
-                error = "The provided value is not a valid number.";
+                error = "Podana wartość nie jest prawidłową liczbą.";
                 return false;
             }
 
             if (numericGrade < 0 || numericGrade > 100)
             {
-                error = "Grade must be between 0 and 100.";
+                error = "Ocena musi być w zakresie od 0 do 100.";
                 return false;
             }
 
@@ -89,29 +90,52 @@ namespace W21
         public Statistics GetStatistics()
         {
             var statistics = new Statistics();
+            statistics.Average = 0;
+            statistics.Max = float.MinValue;
+            statistics.Min = float.MaxValue;
 
-            if (grades.Count > 0)
+            if (this.grades.Any())
             {
-                statistics.Average = grades.Average();
-                statistics.Max = grades.Max();
-                statistics.Min = grades.Min();
+                statistics.Average = this.grades.Average();
+                statistics.Max = this.grades.Max();
+                statistics.Min = this.grades.Min();
             }
-            else
+
+            switch (statistics.Average)
             {
-                statistics.Average = 0;
-                statistics.Max = 0;
-                statistics.Min = 0;
+                case var a when a >= 80:
+                    statistics.AverageLetter = 'A';
+                    break;
+                case var a when a >= 60:
+                    statistics.AverageLetter = 'B';
+                    break;
+                case var a when a >= 40:
+                    statistics.AverageLetter = 'C';
+                    break;
+                case var a when a >= 20:
+                    statistics.AverageLetter = 'D';
+                    break;
+                default:
+                    statistics.AverageLetter = 'E';
+                    break;
             }
 
             return statistics;
         }
+
 
         public Statistics GetStatisticsWithForEach()
         {
             var statistics = new Statistics();
 
             if (grades.Count == 0)
+            {
+                statistics.Average = 0;
+                statistics.Min = 0;
+                statistics.Max = 0;
+                statistics.AverageLetter = 'E';
                 return statistics;
+            }
 
             float sum = 0;
             float min = float.MaxValue;
@@ -128,8 +152,28 @@ namespace W21
             statistics.Min = min;
             statistics.Max = max;
 
+            switch (statistics.Average)
+            {
+                case var a when a >= 80:
+                    statistics.AverageLetter = 'A';
+                    break;
+                case var a when a >= 60:
+                    statistics.AverageLetter = 'B';
+                    break;
+                case var a when a >= 40:
+                    statistics.AverageLetter = 'C';
+                    break;
+                case var a when a >= 20:
+                    statistics.AverageLetter = 'D';
+                    break;
+                default:
+                    statistics.AverageLetter = 'E';
+                    break;
+            }
+
             return statistics;
         }
+
 
         public Statistics GetStatisticsWithFor()
         {
@@ -184,15 +228,19 @@ namespace W21
 
             return statistics;
         }
+
         public Statistics GetStatisticsWithDoWhile()
         {
             var statistics = new Statistics();
+
             if (grades.Count == 0)
                 return statistics;
+
             float sum = 0;
             float min = float.MaxValue;
             float max = float.MinValue;
             int i = 0;
+
             do
             {
                 float grade = grades[i];
@@ -201,9 +249,11 @@ namespace W21
                 max = Math.Max(max, grade);
                 i++;
             } while (i < grades.Count);
+
             statistics.Average = sum / grades.Count;
             statistics.Min = min;
             statistics.Max = max;
+
             return statistics;
         }
     }
