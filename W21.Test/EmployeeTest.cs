@@ -6,45 +6,60 @@ namespace W21Tests
     public class EmployeeTests
     {
         [Test]
-        public void GetStatistics_ShouldReturnCorrectValues()
+        public void GetStatisticsWithForEach_ShouldReturnCorrectValues()
         {
             var emp = new Employee("Test", "Person");
-            emp.AddGrade(4);
-            emp.AddGrade(2);
-            emp.AddGrade(6);
+            emp.AddGrade(80);
+            emp.AddGrade(60);
+            emp.AddGrade(40);
 
-            var stats = emp.GetStatistics();
+            var stats = emp.GetStatisticsWithForEach();
 
-            Assert.That(stats.Average, Is.EqualTo(4));
-            Assert.That(stats.Min, Is.EqualTo(2));
-            Assert.That(stats.Max, Is.EqualTo(6));
+            Assert.That(stats.Average, Is.EqualTo(60));
+            Assert.That(stats.Min, Is.EqualTo(40));
+            Assert.That(stats.Max, Is.EqualTo(80));
+            Assert.That(stats.AverageLetter, Is.EqualTo('B'));
         }
 
         [Test]
-        public void GetStatistics_EmptyGrades_ShouldReturnZeroes()
+        public void GetStatisticsWithForEach_EmptyGrades_ShouldReturnZeroesAndE()
         {
             var emp = new Employee("Empty", "Person");
 
-            var stats = emp.GetStatistics();
+            var stats = emp.GetStatisticsWithForEach();
 
             Assert.That(stats.Average, Is.EqualTo(0));
             Assert.That(stats.Min, Is.EqualTo(0));
             Assert.That(stats.Max, Is.EqualTo(0));
+            Assert.That(stats.AverageLetter, Is.EqualTo('E'));
         }
 
         [Test]
-        public void Grades_WithNegativeValue_ShouldBeIncluded()
+        public void GetStatisticsWithForEach_ShouldAssignCorrectLetter_A()
         {
-            var emp = new Employee("Neg", "Test");
-            emp.AddGrade(3);
-            emp.AddGrade(-2);
-            emp.AddGrade(1);
+            var emp = new Employee("Top", "Performer");
+            emp.AddGrade(100);
+            emp.AddGrade(90);
+            emp.AddGrade(85);
 
-            var stats = emp.GetStatistics();
+            var stats = emp.GetStatisticsWithForEach();
 
-            Assert.That(stats.Min, Is.EqualTo(-2));
-            Assert.That(stats.Max, Is.EqualTo(3));
-            Assert.That(stats.Average, Is.EqualTo(0.6666667f).Within(0.0001));
+            Assert.That(stats.AverageLetter, Is.EqualTo('A'));
         }
+
+        [Test]
+        public void GetStatisticsWithForEach_ShouldAssignCorrectLetter_D()
+        {
+            var emp = new Employee("Low", "Performer");
+            emp.AddGrade(25);
+            emp.AddGrade(20);
+            emp.AddGrade(15);
+
+            var stats = emp.GetStatisticsWithForEach();
+
+            Assert.That(stats.AverageLetter, Is.EqualTo('D'));
+        }
+
+       
     }
 }
