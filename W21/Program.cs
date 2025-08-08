@@ -67,19 +67,43 @@ class Program
     static void AddEmployee()
     {
         Console.WriteLine(new string('═', 60));
-        Console.ForegroundColor = ConsoleColor.Magenta;
-        Console.Write("\n Podaj imię pracownika: ");
-        Console.ResetColor();
-        string? firstNameInput = Console.ReadLine();
-        string firstName = string.IsNullOrWhiteSpace(firstNameInput) ? "Nieznane" : firstNameInput.Trim();
 
-        Console.ForegroundColor = ConsoleColor.Magenta;
-        Console.Write(" Podaj nazwisko pracownika: ");
-        Console.ResetColor();
-        string? lastNameInput = Console.ReadLine();
-        string lastName = string.IsNullOrWhiteSpace(lastNameInput) ? "Nieznane" : lastNameInput.Trim();
+        string? firstNameInput;
+        string? lastNameInput;
 
-        var employee = new Employee(firstName, lastName);
+        do
+        {
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.Write("\n Podaj imię pracownika: ");
+            Console.ResetColor();
+            firstNameInput = Console.ReadLine()?.Trim();
+
+            if (string.IsNullOrWhiteSpace(firstNameInput))
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine(" Imię nie może być puste. Spróbuj ponownie.");
+                Console.ResetColor();
+            }
+
+        } while (string.IsNullOrWhiteSpace(firstNameInput));
+
+        do
+        {
+            Console.ForegroundColor = ConsoleColor.Magenta;
+            Console.Write(" Podaj nazwisko pracownika: ");
+            Console.ResetColor();
+            lastNameInput = Console.ReadLine()?.Trim();
+
+            if (string.IsNullOrWhiteSpace(lastNameInput))
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine(" Nazwisko nie może być puste. Spróbuj ponownie.");
+                Console.ResetColor();
+            }
+
+        } while (string.IsNullOrWhiteSpace(lastNameInput));
+
+        var employee = new Employee(firstNameInput, lastNameInput);
 
         Console.ForegroundColor = ConsoleColor.Yellow;
         Console.WriteLine("\n ════════════════════════════════════════════════════════════");
@@ -128,6 +152,7 @@ class Program
         Console.WriteLine($"\n Dodano pracownika: {employee.Name} {employee.Surname}");
         Console.ResetColor();
     }
+
 
     static void ShowAllStatistics()
     {
