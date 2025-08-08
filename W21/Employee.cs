@@ -12,22 +12,28 @@ namespace W21
 
         public Employee(string name, string surname)
         {
-            this.Name = name;
-            this.Surname = surname;
+            this.Name = name ?? throw new ArgumentNullException(nameof(name), "Imię nie może być puste.");
+            this.Surname = surname ?? throw new ArgumentNullException(nameof(surname), "Nazwisko nie może być puste.");
         }
 
         public void AddGrade(float grade)
         {
-            if (grade < 0)
+            if (grade < 0 || grade > 100)
             {
-                throw new ArgumentOutOfRangeException(nameof(grade), "Ocena nie może być mniejsza niż 0.");
-            }
-            else if (grade > 100)
-            {
-                throw new ArgumentOutOfRangeException(nameof(grade), "Ocena nie może być większa niż 100.");
+                throw new ArgumentOutOfRangeException(nameof(grade), "Ocena musi być w zakresie od 0 do 100.");
             }
 
             grades.Add(grade);
+        }
+
+        public void AddGrade(long grade)
+        {
+            if (grade < 0 || grade > 100)
+            {
+                throw new ArgumentOutOfRangeException(nameof(grade), "Ocena musi być w zakresie od 0 do 100.");
+            }
+
+            grades.Add((float)grade);
         }
 
         public void AddGrade(string grade)
@@ -37,92 +43,41 @@ namespace W21
                 throw new ArgumentException("Ocena nie może być pusta.", nameof(grade));
             }
 
-            if (!float.TryParse(grade, NumberStyles.Float, CultureInfo.InvariantCulture, out float numericGrade))
+            if (!float.TryParse(grade, NumberStyles.Float, new CultureInfo("pl-PL"), out float numericGrade))
             {
-                throw new ArgumentException("Podana wartość nie jest prawidłową liczbą.", nameof(grade));
+                throw new FormatException("Podana wartość nie jest prawidłową liczbą. Wpisz liczbę w formacie np. '9,3'.");
+            }
+
+            if (numericGrade < 0 || numericGrade > 100)
+            {
+                throw new ArgumentOutOfRangeException(nameof(grade), "Ocena musi być w zakresie od 0 do 100.");
             }
 
             AddGrade(numericGrade);
         }
 
-        public void AddGrade(double grade)
-        {
-            if (grade < 0 || grade > 100)
-                throw new ArgumentOutOfRangeException(nameof(grade), "Ocena musi być w zakresie od 0 do 100.");
 
-            grades.Add((float)grade);
-        }
 
-        public void AddGrade(long grade)
-        {
-            if (grade < 0 || grade > 100)
-                throw new ArgumentOutOfRangeException(nameof(grade), "Ocena musi być w zakresie od 0 do 100.");
-
-            grades.Add((float)grade);
-        }
-
-        public bool TryAddGrade(string grade, out string? error)
-        {
-            error = null;
-
-            if (string.IsNullOrWhiteSpace(grade))
-            {
-                error = "Ocena nie może być pusta.";
-                return false;
-            }
-
-            if (!float.TryParse(grade, NumberStyles.Float, CultureInfo.InvariantCulture, out float numericGrade))
-            {
-                error = "Podana wartość nie jest prawidłową liczbą.";
-                return false;
-            }
-
-            if (numericGrade < 0 || numericGrade > 100)
-            {
-                error = "Ocena musi być w zakresie od 0 do 100.";
-                return false;
-            }
-
-            grades.Add(numericGrade);
-            return true;
-        }
 
         public Statistics GetStatistics()
         {
-            var statistics = new Statistics();
-            statistics.Average = 0;
-            statistics.Max = float.MinValue;
-            statistics.Min = float.MaxValue;
-
-            if (this.grades.Any())
+            var statistics = new Statistics
             {
-                statistics.Average = this.grades.Average();
-                statistics.Max = this.grades.Max();
-                statistics.Min = this.grades.Min();
+                Average = 0,
+                Max = float.MinValue,
+                Min = float.MaxValue
+            };
+
+            if (grades.Any())
+            {
+                statistics.Average = grades.Average();
+                statistics.Max = grades.Max();
+                statistics.Min = grades.Min();
             }
 
-            switch (statistics.Average)
-            {
-                case var a when a >= 80:
-                    statistics.AverageLetter = 'A';
-                    break;
-                case var a when a >= 60:
-                    statistics.AverageLetter = 'B';
-                    break;
-                case var a when a >= 40:
-                    statistics.AverageLetter = 'C';
-                    break;
-                case var a when a >= 20:
-                    statistics.AverageLetter = 'D';
-                    break;
-                default:
-                    statistics.AverageLetter = 'E';
-                    break;
-            }
-
+            statistics.AverageLetter = GetLetterGrade(statistics.Average);
             return statistics;
         }
-
 
         public Statistics GetStatisticsWithForEach()
         {
@@ -151,110 +106,21 @@ namespace W21
             statistics.Average = sum / grades.Count;
             statistics.Min = min;
             statistics.Max = max;
-
-            switch (statistics.Average)
-            {
-                case var a when a >= 80:
-                    statistics.AverageLetter = 'A';
-                    break;
-                case var a when a >= 60:
-                    statistics.AverageLetter = 'B';
-                    break;
-                case var a when a >= 40:
-                    statistics.AverageLetter = 'C';
-                    break;
-                case var a when a >= 20:
-                    statistics.AverageLetter = 'D';
-                    break;
-                default:
-                    statistics.AverageLetter = 'E';
-                    break;
-            }
+            statistics.AverageLetter = GetLetterGrade(statistics.Average);
 
             return statistics;
         }
 
-
-        public Statistics GetStatisticsWithFor()
+        private char GetLetterGrade(float average)
         {
-            var statistics = new Statistics();
-
-            if (grades.Count == 0)
-                return statistics;
-
-            float sum = 0;
-            float min = float.MaxValue;
-            float max = float.MinValue;
-
-            for (int i = 0; i < grades.Count; i++)
+            return average switch
             {
-                float grade = grades[i];
-                sum += grade;
-                min = Math.Min(min, grade);
-                max = Math.Max(max, grade);
-            }
-
-            statistics.Average = sum / grades.Count;
-            statistics.Min = min;
-            statistics.Max = max;
-
-            return statistics;
-        }
-
-        public Statistics GetStatisticsWithWhile()
-        {
-            var statistics = new Statistics();
-
-            if (grades.Count == 0)
-                return statistics;
-
-            float sum = 0;
-            float min = float.MaxValue;
-            float max = float.MinValue;
-            int i = 0;
-
-            while (i < grades.Count)
-            {
-                float grade = grades[i];
-                sum += grade;
-                min = Math.Min(min, grade);
-                max = Math.Max(max, grade);
-                i++;
-            }
-
-            statistics.Average = sum / grades.Count;
-            statistics.Min = min;
-            statistics.Max = max;
-
-            return statistics;
-        }
-
-        public Statistics GetStatisticsWithDoWhile()
-        {
-            var statistics = new Statistics();
-
-            if (grades.Count == 0)
-                return statistics;
-
-            float sum = 0;
-            float min = float.MaxValue;
-            float max = float.MinValue;
-            int i = 0;
-
-            do
-            {
-                float grade = grades[i];
-                sum += grade;
-                min = Math.Min(min, grade);
-                max = Math.Max(max, grade);
-                i++;
-            } while (i < grades.Count);
-
-            statistics.Average = sum / grades.Count;
-            statistics.Min = min;
-            statistics.Max = max;
-
-            return statistics;
+                >= 80 => 'A',
+                >= 60 => 'B',
+                >= 40 => 'C',
+                >= 20 => 'D',
+                _ => 'E'
+            };
         }
     }
 }

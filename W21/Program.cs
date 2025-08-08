@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using W21;
 
 class Program
 {
+    static List<Employee> employees = new();
+
     static void Main()
     {
         Console.ForegroundColor = ConsoleColor.Cyan;
@@ -13,23 +16,57 @@ class Program
         Console.WriteLine(new string('═', 60));
         Console.ResetColor();
 
+        while (true)
+        {
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("\n MENU:");
+            Console.WriteLine(" 1. Dodaj pracownika");
+            Console.WriteLine(" 2. Pokaż statystyki pracownikow");
+            Console.WriteLine(" 3. Wyjdź");
+            Console.ResetColor();
+
+            Console.Write(" Wybierz opcję: ");
+            string? option = Console.ReadLine();
+
+            switch (option)
+            {
+                case "1":
+                    AddEmployee();
+                    break;
+                case "2":
+                    ShowAllStatistics();
+                    break;
+                case "3":
+                    Console.WriteLine("\n Dziękuje za skorzystanie z aplikacji!");
+                    return;
+                default:
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine(" Nieprawidłowy wybór. Spróbuj ponownie.");
+                    Console.ResetColor();
+                    break;
+            }
+        }
+    }
+
+    static void AddEmployee()
+    {
         Console.WriteLine(new string('═', 60));
         Console.ForegroundColor = ConsoleColor.Magenta;
         Console.Write("\n Podaj imię pracownika: ");
         Console.ResetColor();
-        string? nameInput = Console.ReadLine();
-        string name = string.IsNullOrWhiteSpace(nameInput) ? "Nieznane" : nameInput.Trim();
+        string? firstNameInput = Console.ReadLine();
+        string firstName = string.IsNullOrWhiteSpace(firstNameInput) ? "Nieznane" : firstNameInput.Trim();
 
         Console.ForegroundColor = ConsoleColor.Magenta;
         Console.Write(" Podaj nazwisko pracownika: ");
         Console.ResetColor();
-        string? surnameInput = Console.ReadLine();
-        string surname = string.IsNullOrWhiteSpace(surnameInput) ? "Nieznane" : surnameInput.Trim();
+        string? lastNameInput = Console.ReadLine();
+        string lastName = string.IsNullOrWhiteSpace(lastNameInput) ? "Nieznane" : lastNameInput.Trim();
 
-        var employee = new Employee(name, surname);
+        var employee = new Employee(firstName, lastName);
 
         Console.ForegroundColor = ConsoleColor.Yellow;
-        Console.WriteLine("\n Wpisz oceny pracownika (wpisz 'q' aby zakończyć i podliczyć):\n");
+        Console.WriteLine("\n Wpisz oceny pracownika ( wpisz 'q' aby zakończyć i przejść do MENU):\n");
         Console.ResetColor();
 
         while (true)
@@ -37,78 +74,98 @@ class Program
             Console.ForegroundColor = ConsoleColor.Magenta;
             Console.Write(" Ocena: ");
             Console.ResetColor();
-            string? input = Console.ReadLine();
+            string? gradeInput = Console.ReadLine();
 
-            if (string.IsNullOrWhiteSpace(input))
+            if (string.IsNullOrWhiteSpace(gradeInput))
             {
                 Console.ForegroundColor = ConsoleColor.DarkYellow;
-                Console.WriteLine("Uwaga: Nie wpisano żadnej wartości. Spróbuj ponownie.");
+                Console.WriteLine(" Uwaga: Nie wpisano żadnej wartości. Spróbuj ponownie.");
                 Console.ResetColor();
                 continue;
             }
 
-            input = input.Trim();
+            gradeInput = gradeInput.Trim();
 
-            if (input.ToLower() == "q")
+            if (gradeInput.ToLower() == "q")
                 break;
 
-            if (!employee.TryAddGrade(input, out string? error))
+            try
+            {
+                employee.AddGrade(gradeInput);
+            }
+            catch (Exception ex)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine($"Błąd: Nie udało się dodać oceny '{input}'. Powód: {error}");
+                Console.WriteLine($" Błąd: Nie udało się dodać oceny '{gradeInput}'. Powód: {ex.Message}");
                 Console.ResetColor();
             }
         }
 
-        Console.ForegroundColor = ConsoleColor.Cyan;
-        Console.WriteLine(new string('═', 60));
-        Console.WriteLine("\n STATYSTYKI PRACOWNIKA\n");
-        Console.ResetColor();
-
-        var stats = employee.GetStatisticsWithForEach();
-        WypiszStatystyki(employee, stats, ConsoleColor.Green);
-
+        employees.Add(employee);
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine($"\n Dodano pracownika: {employee.Name} {employee.Surname}");
         Console.ResetColor();
     }
 
-    static void WypiszStatystyki(Employee emp, Statistics stats, ConsoleColor color)
+    static void ShowAllStatistics()
+    {
+        if (employees.Count == 0)
+        {
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.WriteLine(" Brak pracowników do wyświetlenia.");
+            Console.ResetColor();
+            return;
+        }
+
+        Console.ForegroundColor = ConsoleColor.Cyan;
+        Console.WriteLine("\n STATYSTYKI WSZYSTKICH PRACOWNIKÓW\n");
+        Console.ResetColor();
+
+        foreach (var employee in employees)
+        {
+            var statistics = employee.GetStatisticsWithForEach();
+            DisplayStatistics(employee, statistics, ConsoleColor.Green);
+        }
+    }
+
+    static void DisplayStatistics(Employee employee, Statistics statistics, ConsoleColor color)
     {
         Console.ForegroundColor = color;
-        Console.WriteLine($" Pracownik:         {emp.Name} {emp.Surname}");
-        Console.WriteLine($" Średnia ocen:      {stats.Average:N2}");
-        Console.WriteLine($" Najniższa ocena:   {stats.Min}");
-        Console.WriteLine($" Najwyższa ocena:   {stats.Max}");
-        Console.WriteLine($" Ocena literowa:    {stats.AverageLetter}");
+        Console.WriteLine($" Pracownik:         {employee.Name} {employee.Surname}");
+        Console.WriteLine($" Średnia ocen:      {statistics.Average:N2}");
+        Console.WriteLine($" Najniższa ocena:   {statistics.Min}");
+        Console.WriteLine($" Najwyższa ocena:   {statistics.Max}");
+        Console.WriteLine($" Ocena literowa:    {statistics.AverageLetter}");
         Console.ResetColor();
 
         string description;
-        ConsoleColor descColor;
+        ConsoleColor descriptionColor;
 
-        switch (stats.AverageLetter)
+        switch (statistics.AverageLetter)
         {
             case 'A':
                 description = "Wybitny";
-                descColor = ConsoleColor.DarkGreen;
+                descriptionColor = ConsoleColor.DarkGreen;
                 break;
             case 'B':
                 description = "Bardzo dobry";
-                descColor = ConsoleColor.Green;
+                descriptionColor = ConsoleColor.Green;
                 break;
             case 'C':
                 description = "Dobry";
-                descColor = ConsoleColor.Yellow;
+                descriptionColor = ConsoleColor.Yellow;
                 break;
             case 'D':
                 description = "Dostateczny";
-                descColor = ConsoleColor.DarkYellow;
+                descriptionColor = ConsoleColor.DarkYellow;
                 break;
             default:
                 description = "Niedostateczny";
-                descColor = ConsoleColor.Red;
+                descriptionColor = ConsoleColor.Red;
                 break;
         }
 
-        Console.ForegroundColor = descColor;
+        Console.ForegroundColor = descriptionColor;
         Console.WriteLine($" Ocena opisowa:     {description}");
         Console.ResetColor();
         Console.WriteLine(new string('═', 60));
