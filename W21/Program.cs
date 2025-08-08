@@ -40,7 +40,7 @@ class Program
                 case "3":
                     Console.ForegroundColor = ConsoleColor.Cyan;
                     Console.WriteLine();
-                    TypeEffect(" Dziękuję za skorzystanie z aplikacji! Miłego dnia :-) ", 20);
+                    TypeEffect(" Dziękujemy za skorzystanie z aplikacji! Miłego dnia :-) ", 20);
                     Console.ResetColor();
                     Console.WriteLine("\n Naciśnij dowolny klawisz, aby zamknąć...");
                     Console.ReadKey();
@@ -213,7 +213,7 @@ class Program
                 descriptionColor = ConsoleColor.DarkYellow;
                 break;
             default:
-                description = "Niedostateczny";
+                description = "Niedostateczny DO ZWOLNIENIA  :-(";
                 descriptionColor = ConsoleColor.Red;
                 break;
         }
