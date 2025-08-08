@@ -1,95 +1,82 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 
 namespace W21
 {
-    public class Employee
+    public class Employee : Person
     {
-        private List<float> grades = new List<float>();
-
-        public string Name { get; private set; }
-        public string Surname { get; private set; }
+        private readonly List<float> grades = new();
 
         public Employee(string name, string surname)
+            : base(name, surname)
         {
-            this.Name = name ?? throw new ArgumentNullException(nameof(name), "Imię nie może być puste.");
-            this.Surname = surname ?? throw new ArgumentNullException(nameof(surname), "Nazwisko nie może być puste.");
         }
+
+        //public override string GetRole() => "Employee";
 
         public void AddGrade(float grade)
         {
             if (grade < 0 || grade > 100)
-            {
                 throw new ArgumentOutOfRangeException(nameof(grade), "Ocena musi być w zakresie od 0 do 100.");
-            }
 
             grades.Add(grade);
         }
 
-        public void AddGrade(long grade)
-        {
-            if (grade < 0 || grade > 100)
-            {
-                throw new ArgumentOutOfRangeException(nameof(grade), "Ocena musi być w zakresie od 0 do 100.");
-            }
-
-            grades.Add((float)grade);
-        }
+        public void AddGrade(long grade) => AddGrade((float)grade);
 
         public void AddGrade(string grade)
         {
             if (string.IsNullOrWhiteSpace(grade))
-            {
                 throw new ArgumentException("Ocena nie może być pusta.", nameof(grade));
+
+            grade = grade.Trim().ToUpper();
+
+            switch (grade)
+            {
+                case "A": AddGrade(100); return;
+                case "B": AddGrade(80); return;
+                case "C": AddGrade(60); return;
+                case "D": AddGrade(40); return;
+                case "E": AddGrade(20); return;
             }
 
             if (!float.TryParse(grade, NumberStyles.Float, new CultureInfo("pl-PL"), out float numericGrade))
-            {
-                throw new FormatException("Podana wartość nie jest prawidłową liczbą. Wpisz liczbę w formacie np. '9,3'.");
-            }
-
-            if (numericGrade < 0 || numericGrade > 100)
-            {
-                throw new ArgumentOutOfRangeException(nameof(grade), "Ocena musi być w zakresie od 0 do 100.");
-            }
+                throw new FormatException("Nieprawidłowy format liczby. Wpisz np. '9,3' lub literę od A do E.");
 
             AddGrade(numericGrade);
         }
 
-
-
-
         public Statistics GetStatistics()
         {
-            var statistics = new Statistics
-            {
-                Average = 0,
-                Max = float.MinValue,
-                Min = float.MaxValue
-            };
+            var stats = new Statistics();
 
-            if (grades.Any())
+            if (grades.Count == 0)
             {
-                statistics.Average = grades.Average();
-                statistics.Max = grades.Max();
-                statistics.Min = grades.Min();
+                stats.Average = 0;
+                stats.Min = 0;
+                stats.Max = 0;
+                stats.AverageLetter = 'E';
+                return stats;
             }
 
-            statistics.AverageLetter = GetLetterGrade(statistics.Average);
-            return statistics;
+            stats.Average = grades.Average();
+            stats.Min = grades.Min();
+            stats.Max = grades.Max();
+            stats.AverageLetter = GetLetterGrade(stats.Average);
+
+            return stats;
         }
 
         public Statistics GetStatisticsWithForEach()
         {
-            var statistics = new Statistics();
+            var stats = new Statistics();
 
             if (grades.Count == 0)
             {
-                statistics.Average = 0;
-                statistics.Min = 0;
-                statistics.Max = 0;
-                statistics.AverageLetter = 'E';
-                return statistics;
+                stats.Average = 0;
+                stats.Min = 0;
+                stats.Max = 0;
+                stats.AverageLetter = 'E';
+                return stats;
             }
 
             float sum = 0;
@@ -103,24 +90,21 @@ namespace W21
                 max = Math.Max(max, grade);
             }
 
-            statistics.Average = sum / grades.Count;
-            statistics.Min = min;
-            statistics.Max = max;
-            statistics.AverageLetter = GetLetterGrade(statistics.Average);
+            stats.Average = sum / grades.Count;
+            stats.Min = min;
+            stats.Max = max;
+            stats.AverageLetter = GetLetterGrade(stats.Average);
 
-            return statistics;
+            return stats;
         }
 
-        private char GetLetterGrade(float average)
+        private char GetLetterGrade(float average) => average switch
         {
-            return average switch
-            {
-                >= 80 => 'A',
-                >= 60 => 'B',
-                >= 40 => 'C',
-                >= 20 => 'D',
-                _ => 'E'
-            };
-        }
+            >= 80 => 'A',
+            >= 60 => 'B',
+            >= 40 => 'C',
+            >= 20 => 'D',
+            _ => 'E'
+        };
     }
 }

@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Threading;
+
 using W21;
 
 class Program
@@ -10,9 +10,9 @@ class Program
     {
         Console.ForegroundColor = ConsoleColor.Cyan;
         Console.WriteLine(new string('═', 60));
-        Console.WriteLine("  WITAMY W APLIKACJI OCEN PRACOWNIKA");
-        Console.WriteLine("  Autor: Robert Lorenc");
-        Console.WriteLine("  Projekt: Wyzwanie w 21 Dni — edu.gotoit.pl");
+        TypeEffect("  WITAMY W APLIKACJI OCEN PRACOWNIKA", 20);
+        Console.WriteLine("  Autor: Robert Lorenc", 20);
+        Console.WriteLine("  Projekt: Wyzwanie w 21 Dni — edu.gotoit.pl", 20);
         Console.WriteLine(new string('═', 60));
         Console.ResetColor();
 
@@ -37,7 +37,12 @@ class Program
                     ShowAllStatistics();
                     break;
                 case "3":
-                    Console.WriteLine("\n Dziękuje za skorzystanie z aplikacji!");
+                    Console.ForegroundColor = ConsoleColor.Cyan;
+                    Console.WriteLine();
+                    TypeEffect(" Dziękuję za skorzystanie z aplikacji! Miłego dnia :-) ", 20);
+                    Console.ResetColor();
+                    Console.WriteLine("\n Naciśnij dowolny klawisz, aby zamknąć...");
+                    Console.ReadKey();
                     return;
                 default:
                     Console.ForegroundColor = ConsoleColor.Red;
@@ -45,7 +50,18 @@ class Program
                     Console.ResetColor();
                     break;
             }
+
         }
+    }
+
+    static void TypeEffect(string message, int delay = 40)
+    {
+        foreach (char c in message)
+        {
+            Console.Write(c);
+            Thread.Sleep(delay);
+        }
+        Console.WriteLine();
     }
 
     static void AddEmployee()
@@ -66,7 +82,13 @@ class Program
         var employee = new Employee(firstName, lastName);
 
         Console.ForegroundColor = ConsoleColor.Yellow;
-        Console.WriteLine("\n Wpisz oceny pracownika ( wpisz 'q' aby zakończyć i przejść do MENU):\n");
+        Console.WriteLine("\n ════════════════════════════════════════════════════════════");
+        Console.WriteLine(" Wpisz oceny pracownika wpisz 'q' aby zakończyć:");
+        Console.WriteLine(" Możesz podać ocenę jako:");
+        Console.WriteLine("    Liczbę od  0 do 100 ");
+        Console.WriteLine("    Literę od A do E:");
+        Console.WriteLine("     A = 100   B = 80   C = 60   D = 40   E = 20");
+        Console.WriteLine("════════════════════════════════════════════════════════════\n");
         Console.ResetColor();
 
         while (true)
