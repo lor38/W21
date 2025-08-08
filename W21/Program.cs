@@ -5,6 +5,7 @@ using W21;
 class Program
 {
     static List<Employee> employees = new();
+    static bool hasShownGradeInstructions = false;
 
     static void Main()
     {
@@ -105,15 +106,20 @@ class Program
 
         var employee = new Employee(firstNameInput, lastNameInput);
 
-        Console.ForegroundColor = ConsoleColor.Yellow;
-        Console.WriteLine("\n ════════════════════════════════════════════════════════════");
-        Console.WriteLine(" Wpisz oceny pracownika wpisz 'q' aby zakończyć:");
-        Console.WriteLine(" Możesz podać ocenę jako:");
-        Console.WriteLine("    Liczbę od  0 do 100 ");
-        Console.WriteLine("    Literę od A do E:");
-        Console.WriteLine("     A = 100   B = 80   C = 60   D = 40   E = 20");
-        Console.WriteLine("════════════════════════════════════════════════════════════\n");
-        Console.ResetColor();
+        if (!hasShownGradeInstructions)
+        {
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.WriteLine("\n ════════════════════════════════════════════════════════════");
+            Console.WriteLine(" Wpisz oceny pracownika wpisz 'q' aby zakończyć:");
+            Console.WriteLine(" Możesz podać ocenę jako:");
+            Console.WriteLine("    Liczbę od  0 do 100 ");
+            Console.WriteLine("    Literę od A do E:");
+            Console.WriteLine("     A = 100   B = 80   C = 60   D = 40   E = 20");
+            Console.WriteLine("════════════════════════════════════════════════════════════\n");
+            Console.ResetColor();
+
+            hasShownGradeInstructions = true; 
+        }
 
         while (true)
         {
