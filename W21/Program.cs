@@ -1,10 +1,8 @@
-﻿using System.Threading;
-
-using W21;
+﻿using W21;
 
 class Program
 {
-    static List<Employee> employees = new();
+    static List<IEmployee> employees = new();
     static bool hasShownGradeInstructions = false;
 
     static void Main()
@@ -12,8 +10,8 @@ class Program
         Console.ForegroundColor = ConsoleColor.Cyan;
         Console.WriteLine(new string('═', 60));
         TypeEffect("  WITAMY W APLIKACJI OCEN PRACOWNIKA", 20);
-        Console.WriteLine("  Autor: Robert Lorenc", 20);
-        Console.WriteLine("  Projekt: Wyzwanie w 21 Dni — edu.gotoit.pl", 20);
+        Console.WriteLine("  Autor: Robert Lorenc");
+        Console.WriteLine("  Projekt: Wyzwanie w 21 Dni — edu.gotoit.pl");
         Console.WriteLine(new string('═', 60));
         Console.ResetColor();
 
@@ -51,7 +49,6 @@ class Program
                     Console.ResetColor();
                     break;
             }
-
         }
     }
 
@@ -104,21 +101,53 @@ class Program
 
         } while (string.IsNullOrWhiteSpace(lastNameInput));
 
-        var employee = new Employee(firstNameInput, lastNameInput);
+        Console.WriteLine("\n Wybierz typ pracownika:");
+        Console.WriteLine(" 1. Pracownik zwykły");
+        Console.WriteLine(" 2. Supervisor (oceny: 6, 5, 4, 3, 3-, 2+, 2, 1)");
+
+        string? typeOption = Console.ReadLine()?.Trim();
+        IEmployee employee;
+
+        switch (typeOption)
+        {
+            case "1":
+                employee = new Employee(firstNameInput, lastNameInput);
+                break;
+            case "2":
+                employee = new Supervisor(firstNameInput, lastNameInput);
+                break;
+            default:
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine(" Nieprawidłowy wybór typu pracownika.");
+                Console.ResetColor();
+                return;
+        }
 
         if (!hasShownGradeInstructions)
         {
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.WriteLine("\n ════════════════════════════════════════════════════════════");
-            Console.WriteLine(" Wpisz oceny pracownika wpisz 'q' aby zakończyć:");
-            Console.WriteLine(" Możesz podać ocenę jako:");
-            Console.WriteLine("    Liczbę od  0 do 100 ");
-            Console.WriteLine("    Literę od A do E:");
-            Console.WriteLine("     A = 100   B = 80   C = 60   D = 40   E = 20");
+
+            if (employee is Employee)
+            {
+                Console.WriteLine(" Wpisz oceny pracownika wpisz 'q' aby zakończyć:");
+                Console.WriteLine(" Możesz podać ocenę jako:");
+                Console.WriteLine("    Liczbę od  0 do 100 ");
+                Console.WriteLine("    Literę od A do E:");
+                Console.WriteLine("     A = 100   B = 80   C = 60   D = 40   E = 20");
+            }
+            else if (employee is Supervisor)
+            {
+                Console.WriteLine(" Wpisz oceny Supervisor'a wpisz 'q' aby zakończyć:");
+                Console.WriteLine(" Możesz podać ocenę jako:");
+                Console.WriteLine("     6 = 100   5 = 80   4 = 60   3 = 40");
+                Console.WriteLine("     3- = 35   2+ = 25   2 = 20   1 = 0");
+            }
+
             Console.WriteLine("════════════════════════════════════════════════════════════\n");
             Console.ResetColor();
 
-            hasShownGradeInstructions = true; 
+            hasShownGradeInstructions = true;
         }
 
         while (true)
@@ -159,7 +188,6 @@ class Program
         Console.ResetColor();
     }
 
-
     static void ShowAllStatistics()
     {
         if (employees.Count == 0)
@@ -181,45 +209,49 @@ class Program
         }
     }
 
-    static void DisplayStatistics(Employee employee, Statistics statistics, ConsoleColor color)
+    static void DisplayStatistics(IEmployee employee, Statistics statistics, ConsoleColor color)
     {
         Console.ForegroundColor = color;
         Console.WriteLine($" Pracownik:         {employee.Name} {employee.Surname}");
         Console.WriteLine($" Średnia ocen:      {statistics.Average:N2}");
         Console.WriteLine($" Najniższa ocena:   {statistics.Min}");
         Console.WriteLine($" Najwyższa ocena:   {statistics.Max}");
-        Console.WriteLine($" Ocena literowa:    {statistics.AverageLetter}");
-        Console.ResetColor();
 
-        string description;
-        ConsoleColor descriptionColor;
-
-        switch (statistics.AverageLetter)
+        if (employee is Employee)
         {
-            case 'A':
-                description = "Wybitny";
-                descriptionColor = ConsoleColor.DarkGreen;
-                break;
-            case 'B':
-                description = "Bardzo dobry";
-                descriptionColor = ConsoleColor.Green;
-                break;
-            case 'C':
-                description = "Dobry";
-                descriptionColor = ConsoleColor.Yellow;
-                break;
-            case 'D':
-                description = "Dostateczny";
-                descriptionColor = ConsoleColor.DarkYellow;
-                break;
-            default:
-                description = "Niedostateczny DO ZWOLNIENIA  :-(";
-                descriptionColor = ConsoleColor.Red;
-                break;
+            Console.WriteLine($" Ocena literowa:    {statistics.AverageLetter}");
+
+            string description;
+            ConsoleColor descriptionColor;
+
+            switch (statistics.AverageLetter)
+            {
+                case 'A':
+                    description = "Wybitny";
+                    descriptionColor = ConsoleColor.DarkGreen;
+                    break;
+                case 'B':
+                    description = "Bardzo dobry";
+                    descriptionColor = ConsoleColor.Green;
+                    break;
+                case 'C':
+                    description = "Dobry";
+                    descriptionColor = ConsoleColor.Yellow;
+                    break;
+                case 'D':
+                    description = "Dostateczny";
+                    descriptionColor = ConsoleColor.DarkYellow;
+                    break;
+                default:
+                    description = "Niedostateczny DO ZWOLNIENIA  :-(";
+                    descriptionColor = ConsoleColor.Red;
+                    break;
+            }
+
+            Console.ForegroundColor = descriptionColor;
+            Console.WriteLine($" Ocena opisowa:     {description}");
         }
 
-        Console.ForegroundColor = descriptionColor;
-        Console.WriteLine($" Ocena opisowa:     {description}");
         Console.ResetColor();
         Console.WriteLine(new string('═', 60));
     }

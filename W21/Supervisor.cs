@@ -1,12 +1,14 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace W21
 {
-    public class Employee : Person, IEmployee
+    public class Supervisor : Person, IEmployee
     {
         private readonly List<float> grades = new();
 
-        public Employee(string name, string surname)
+        public Supervisor(string name, string surname)
             : base(name, surname)
         {
         }
@@ -26,21 +28,22 @@ namespace W21
             if (string.IsNullOrWhiteSpace(grade))
                 throw new ArgumentException("Ocena nie może być pusta.", nameof(grade));
 
-            grade = grade.Trim().ToUpper();
+            grade = grade.Trim();
 
-            switch (grade)
+            float value = grade switch
             {
-                case "A": AddGrade(100); return;
-                case "B": AddGrade(80); return;
-                case "C": AddGrade(60); return;
-                case "D": AddGrade(40); return;
-                case "E": AddGrade(20); return;
-            }
+                "6" => 100,
+                "5" => 80,
+                "4" => 60,
+                "3" => 40,
+                "-3" or "3-" => 35,
+                "2+" or "+2" => 25,
+                "2" => 20,
+                "1" => 0,
+                _ => throw new ArgumentException($"Nieznana ocena: '{grade}'")
+            };
 
-            if (!float.TryParse(grade, NumberStyles.Float, new CultureInfo("pl-PL"), out float numericGrade))
-                throw new FormatException("Nieprawidłowy format liczby. Wpisz np. '9,3' lub literę od A do E.");
-
-            AddGrade(numericGrade);
+            AddGrade(value);
         }
 
         public Statistics GetStatistics()
@@ -52,14 +55,12 @@ namespace W21
                 stats.Average = 0;
                 stats.Min = 0;
                 stats.Max = 0;
-                stats.AverageLetter = 'E';
                 return stats;
             }
 
             stats.Average = grades.Average();
             stats.Min = grades.Min();
             stats.Max = grades.Max();
-            stats.AverageLetter = GetLetterGrade(stats.Average);
 
             return stats;
         }
@@ -73,7 +74,6 @@ namespace W21
                 stats.Average = 0;
                 stats.Min = 0;
                 stats.Max = 0;
-                stats.AverageLetter = 'E';
                 return stats;
             }
 
@@ -91,18 +91,8 @@ namespace W21
             stats.Average = sum / grades.Count;
             stats.Min = min;
             stats.Max = max;
-            stats.AverageLetter = GetLetterGrade(stats.Average);
 
             return stats;
         }
-
-        private char GetLetterGrade(float average) => average switch
-        {
-            >= 80 => 'A',
-            >= 60 => 'B',
-            >= 40 => 'C',
-            >= 20 => 'D',
-            _ => 'E'
-        };
     }
 }
