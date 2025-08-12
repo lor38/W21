@@ -25,9 +25,6 @@ namespace W21
 
         public void AddGrade(string grade)
         {
-            if (string.IsNullOrWhiteSpace(grade))
-                throw new ArgumentException("Ocena nie może być pusta.", nameof(grade));
-
             grade = grade.Trim();
 
             float value = grade switch
@@ -36,7 +33,7 @@ namespace W21
                 "5" => 80,
                 "4" => 60,
                 "3" => 40,
-                "-3" or "3-" => 35,
+                "3-" or "-3" => 35,
                 "2+" or "+2" => 25,
                 "2" => 20,
                 "1" => 0,
@@ -49,6 +46,7 @@ namespace W21
         public Statistics GetStatistics()
         {
             var stats = new Statistics();
+            stats.IsSupervisor = true;
 
             if (grades.Count == 0)
             {
@@ -68,6 +66,7 @@ namespace W21
         public Statistics GetStatisticsWithForEach()
         {
             var stats = new Statistics();
+            stats.IsSupervisor = true;
 
             if (grades.Count == 0)
             {
