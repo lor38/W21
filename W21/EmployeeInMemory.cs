@@ -1,4 +1,7 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 
 namespace W21
 {
@@ -17,6 +20,9 @@ namespace W21
                 throw new ArgumentOutOfRangeException(nameof(grade), "Ocena musi być w zakresie od 0 do 100.");
 
             grades.Add(grade);
+
+            // Wywołanie zdarzenia z klasy bazowej
+            OnGradeAdded();
         }
 
         public override void AddGrade(long grade) => AddGrade((float)grade);

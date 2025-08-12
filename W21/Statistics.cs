@@ -14,10 +14,13 @@ namespace W21
         {
             if (IsSupervisor)
             {
-                if (Average >= 95) return "Znakomity mentor";
-                if (Average >= 80) return "Dobry lider";
-                if (Average >= 60) return "Kierownik do poprawy";
-                return "Niedostateczny DO ZWOLNIENIA :-(";
+                return Average switch
+                {
+                    >= 95 => "Znakomity mentor",
+                    >= 80 => "Dobry lider",
+                    >= 60 => "Kierownik do poprawy",
+                    _ => "Niedostateczny DO ZWOLNIENIA :-("
+                };
             }
             else
             {
@@ -36,10 +39,13 @@ namespace W21
         {
             if (IsSupervisor)
             {
-                if (Average >= 95) return ConsoleColor.DarkGreen;
-                if (Average >= 80) return ConsoleColor.Green;
-                if (Average >= 60) return ConsoleColor.Yellow;
-                return ConsoleColor.Red;
+                return Average switch
+                {
+                    >= 95 => ConsoleColor.DarkGreen,
+                    >= 80 => ConsoleColor.Green,
+                    >= 60 => ConsoleColor.Yellow,
+                    _ => ConsoleColor.Red
+                };
             }
             else
             {

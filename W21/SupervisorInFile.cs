@@ -12,6 +12,8 @@ namespace W21
         private readonly List<GradeEntry> grades = new();
         public List<GradeEntry> GetAllGrades() => new(grades);
 
+        public event GradeAddedDelegate? GradeAdded;
+
         public SupervisorInFile(string name, string surname)
             : base(name, surname)
         {
@@ -73,6 +75,12 @@ namespace W21
 
             grades.Add(entry);
             File.AppendAllText(filePath, entry.ToString() + Environment.NewLine);
+            OnGradeAdded();
+        }
+
+        protected void OnGradeAdded()
+        {
+            GradeAdded?.Invoke(this, EventArgs.Empty);
         }
 
         public Statistics GetStatistics()
@@ -167,7 +175,7 @@ namespace W21
                 }
                 catch
                 {
-                    
+                  
                 }
             }
         }

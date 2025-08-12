@@ -11,11 +11,5 @@
             Surname = surname ?? throw new ArgumentNullException(nameof(surname), "Nazwisko nie może być puste.");
         }
 
-        //public abstract string GetRole();
-
-        //public override string ToString()
-        //{
-        // return $"{Name} {Surname} ({GetRole()})";
-        //}
     }
 }

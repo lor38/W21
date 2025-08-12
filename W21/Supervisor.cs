@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace W21
 {
-    public class Supervisor : Person, IEmployee
+    public class Supervisor : EmployeeBase
     {
         private readonly List<float> grades = new();
 
@@ -13,18 +13,22 @@ namespace W21
         {
         }
 
-        public void AddGrade(float grade)
+        public override void AddGrade(float grade)
         {
             if (grade < 0 || grade > 100)
                 throw new ArgumentOutOfRangeException(nameof(grade), "Ocena musi być w zakresie od 0 do 100.");
 
             grades.Add(grade);
+            OnGradeAdded();
         }
 
-        public void AddGrade(long grade) => AddGrade((float)grade);
+        public override void AddGrade(long grade) => AddGrade((float)grade);
 
-        public void AddGrade(string grade)
+        public override void AddGrade(string grade)
         {
+            if (string.IsNullOrWhiteSpace(grade))
+                throw new ArgumentException("Ocena nie może być pusta.");
+
             grade = grade.Trim();
 
             float value = grade switch
@@ -43,10 +47,9 @@ namespace W21
             AddGrade(value);
         }
 
-        public Statistics GetStatistics()
+        public override Statistics GetStatistics()
         {
-            var stats = new Statistics();
-            stats.IsSupervisor = true;
+            var stats = new Statistics { IsSupervisor = true };
 
             if (grades.Count == 0)
             {
@@ -58,15 +61,14 @@ namespace W21
 
             stats.Average = grades.Average();
             stats.Min = grades.Min();
-            stats.Max = grades.Max();
+            stats.Max = grades.Max(); // ← poprawka: dodaj nawiasy!
 
             return stats;
         }
 
-        public Statistics GetStatisticsWithForEach()
+        public override Statistics GetStatisticsWithForEach()
         {
-            var stats = new Statistics();
-            stats.IsSupervisor = true;
+            var stats = new Statistics { IsSupervisor = true };
 
             if (grades.Count == 0)
             {
